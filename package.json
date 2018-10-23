@@ -1,0 +1,7 @@
+{
+  "name": "cwp-10",
+  "author": "Alena Savchuk",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}

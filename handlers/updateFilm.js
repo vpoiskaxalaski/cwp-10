@@ -88,7 +88,7 @@ module.exports.updateFilm = function(req, res, payload, cb) {
 
 		}
 		fs.writeFile("top2501.json", JSON.stringify(newFilms), "utf8", function () { });
-		cb(null, newFilm);
+		cb(null, newFilm, newFilms);
 	}
 	else
 	{

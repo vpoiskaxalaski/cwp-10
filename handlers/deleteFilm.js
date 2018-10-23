@@ -30,7 +30,7 @@ module.exports.deleteFilm = function(req, res, payload, cb) {
 		}
 		if (flag) {
 			newFilms = head.concat(tail);
-			cb(f);
+			cb(null, f,newFilms);
 			fs.writeFile("top2501.json", JSON.stringify(newFilms), "utf8", () => {});
 		}
 		else

@@ -7,11 +7,14 @@ const updateFilm = require("./handlers/updateFilm.js").updateFilm;
 const deleteFilm = require("./handlers/deleteFilm.js").deleteFilm;
 const childProcess = require('child_process');
 
+let collections = [];
+
 app.get('/api/films/readall', (req, res) =>
 {
 	console.log("readall");
 	readAll(req, res, (err, result) =>
 	{
+		collections = result;
 		res.send(JSON.stringify(result));
 	});
 });
@@ -35,7 +38,7 @@ app.get('/api/films/read/:id', (req, res) =>
 app.post('/api/films/create', (req, res) => {
 	console.log("create");
 	parseBodyJson(req, (err, payload) => {
-		createFilm(req, res, payload, (err, result) =>
+		createFilm(req, res, payload, (err, result, col) =>
 		{
 			if (err)
 			{
@@ -43,6 +46,7 @@ app.post('/api/films/create', (req, res) => {
 			}
 			else
 			{
+				collections = col;
 				res.send(JSON.stringify(result));
 			}
 		});
@@ -51,7 +55,7 @@ app.post('/api/films/create', (req, res) => {
 
 app.post('/api/films/update', (req, res) => {
 	parseBodyJson(req, (err, payload) => {
-		updateFilm(req, res, payload, (err, result) =>
+		updateFilm(req, res, payload, (err, result, col) =>
 		{
 			if (err)
 			{
@@ -59,6 +63,7 @@ app.post('/api/films/update', (req, res) => {
 			}
 			else
 			{
+				collections = col;
 				res.send(JSON.stringify(result));
 			}
 		});
@@ -67,7 +72,7 @@ app.post('/api/films/update', (req, res) => {
 
 app.post('/api/films/delete', (req, res) => {
 	parseBodyJson(req, (err, payload) => {
-		deleteFilm(req, res, payload, (err, result) =>
+		deleteFilm(req, res, payload, (err, result, col) =>
 		{
 			if (err)
 			{
@@ -75,6 +80,7 @@ app.post('/api/films/delete', (req, res) => {
 			}
 			else
 			{
+				collections = col;
 				res.send(JSON.stringify(result));
 			}
 		});
@@ -87,7 +93,11 @@ app.get('/', (req, res) => {
 
 app.listen(3000, () => {
 	console.log('Example app listening on port 3000!');
-	childProcess.spawn("node", ["log (task 10.2.6)/logger.js"]);
+	setInterval(() =>
+{
+	childProcess.spawn("node", ["log/logger.js", JSON.stringify(collections)]);
+}, 60000);
+	
 });
 
 function parseBodyJson(req, cb) {

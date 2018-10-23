@@ -46,11 +46,11 @@ module.exports.createFilm = function(req, res, payload, cb) {
 				payload.position = maxPosition + 1;
 			}
 			films.push(payload);
-			newFilms = films
+			newFilms = films;
 		}
 
 		fs.writeFile("top2501.json", JSON.stringify(newFilms), "utf8", function () {});
-		cb(null, f);
+		cb(null, f, newFilms);
 	}
 	else
 	{
